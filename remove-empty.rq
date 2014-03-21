@@ -1,0 +1,24 @@
+#PREFIX dcterms: <http://purl.org/dc/terms/>
+#PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+DELETE { ?s ?p ?o . }
+
+WHERE {
+  ### Predicate filtering ###
+  # Any predicate
+  ?s ?p ?o .
+  # or single predicate
+  #?s dcterms:title ?o .
+  
+  # Enter reegular expression to use for filtering, default is empty string
+  BIND('^$' AS ?regexp)
+  
+  ### Optional fitlering by class of subject ###
+  #?s a skos:Concept .
+  
+  
+  
+  ### Don't modify below this line ### 
+  FILTER(isLiteral(?o))
+  FILTER(REGEX(?o, ?regexp))
+}
