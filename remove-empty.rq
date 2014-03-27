@@ -4,20 +4,28 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 DELETE { ?s ?p ?o . }
 
 WHERE {
-  ### Predicate filtering ###
-  # Any predicate
   ?s ?p ?o .
-  # or single predicate
-  #?s dcterms:title ?o .
+  
+  ### Optional predicate filtering ###
+  #BIND(dcterms:title AS ?predicate)
   
   ### Optional fitlering by class of subject ###
   #?s a foaf:Person .
   
-  # Enter regular expression to use for filtering, default is empty string
-  BIND('^$' AS ?regexp)
+  # Enter value that should be removed, default is an empty string
+  BIND('' AS ?toRemove)
   
   
   ### Don't modify below this line ### 
   FILTER(isLiteral(?o))
-  FILTER(REGEX(?o, ?regexp))
+  
+  FILTER(
+    IF(
+      BOUND(?predicate),
+      ?p = ?predicate,
+      true
+    )
+  )
+  
+  FILTER(STR(?o) = ?toRemove)
 }
